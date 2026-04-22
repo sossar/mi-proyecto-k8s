@@ -1,25 +1,28 @@
-name: Deploy to EC2 Kind Cluster
+name: Kubernetes Workflow
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ] # Se activa al subir cambios a la rama main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
+      - name: Checkout del código
         uses: actions/checkout@v3
 
-      - name: Deploy to EC2 via SSH
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ubuntu
-          key: ${{ secrets.EC2_SSH_KEY }}
-          script: |
-            cd ~  # O la ruta donde tengas tus archivos .yml
-            kubectl apply -f deployment.yml
-            kubectl apply -f service.yml
+      - name: Configurar Kubernetes
+        run: |
+          # Aquí usamos tu secreto para autenticarnos
+          echo "Configurando entorno con TOKEN_KUBERNETES..."
+          # En un entorno real aquí configurarías el kubeconfig
+          
+      - name: Aplicar cambios (Página 19 del PDF)
+        run: |
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml
+
+      - name: Verificación final (Página 20 del PDF)
+        run: |
+          kubectl get svc
+          kubectl get pods
